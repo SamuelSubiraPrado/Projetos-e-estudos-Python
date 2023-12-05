@@ -6,10 +6,8 @@ while continuar == True:
 
     try:
         n1= float(input("Digite o primeiro número: "))
-        print (n1)
         operador = input("Digite o operador (+ ,-,/,*): ")
         n2= float(input("Digite o segundo número: "))
-        print (n2)
         resultado = 0
 
         if operador == '+': 
