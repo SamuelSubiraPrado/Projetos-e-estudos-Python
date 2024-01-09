@@ -88,11 +88,11 @@ else :
     primeiro_digito = resto_div
 
 #OBTENDO O SEGUNDO DÍGITO
-cpf_final = cpf_extraido + str(primeiro_digito)
+cpf_dez_digitos = cpf_extraido + str(primeiro_digito)
 multiplicador = 11
 soma_multiplicador_cpf = 0
 
-for numero_cpf in cpf_extraido:
+for numero_cpf in cpf_dez_digitos:
     if multiplicador != 1:
         soma_multiplicador_cpf += (multiplicador * int(numero_cpf))
         multiplicador += -1
