@@ -1,0 +1,57 @@
+# Jogo da Adivinhação
+# Desenvolva um programa simples em Python que permita
+# ao usuário adivinhar um número secreto.O programa deve 
+# fornecer dicas ao usuário para ajudá-lo a acertar o número.
+import random
+
+numero_secreto = random.randint(0,1000)
+tentativas = 0
+numero_usuario = ''
+print("BEM VINDO AO JOGO DE ADIVINHAÇÃO\n")
+print("número secreto é um numero inteiro entre 0 e 1000")
+ultimo_numero_mais_proximo = 0
+
+while numero_secreto != numero_usuario:
+
+    try:
+        numero_usuario= int(input("Qual o seu palpite? "))
+        print()
+    except:
+        print('DIGITE APENAS NÚMEROS INTEIROS\n')
+        continue
+    
+    if numero_secreto == numero_usuario:
+        print('PARABENS!!!!\n')
+        print("Você acertou o número")
+        print(f'O número era: {numero_secreto}')
+    else:  
+
+        comparacao = numero_secreto - numero_usuario
+        comparacao_neg = numero_usuario - numero_secreto
+
+        #Salva o ultimo número que mais chegou proxímo ao resultado para ser usado em futuras dicas
+        if numero_secreto - ultimo_numero_mais_proximo > comparacao and numero_usuario <= numero_secreto:
+                ultimo_numero_mais_proximo = numero_usuario
+        
+        if (comparacao <= 5 and comparacao >=0) or (comparacao_neg <= 5 and comparacao_neg>=0):
+                print("Extremamente perto!")
+        elif (comparacao <= 10 and comparacao >=0) or (comparacao_neg <= 10 and comparacao_neg>=0):
+                print("Muito perto!")
+        elif (comparacao <= 50 and comparacao >=0) or (comparacao_neg <= 50 and comparacao_neg>=0):
+                print('Chegando perto...')
+        elif (comparacao <= 100 and comparacao >=0) or (comparacao_neg <= 100 and comparacao_neg>=0):
+                print('Não tão longe')
+        else:
+                print('Muito longe')
+        print()
+            #Utiliza o ultimo número que mais chegou proxímo ao resultado como 
+            #limite inferior e o numero secreto + um numero aleatorio como limite superior
+                
+        if tentativas == 4:
+                print(f'DICA: o número está entre {ultimo_numero_mais_proximo} e {numero_secreto + random.randint(1,100)}')
+        if tentativas == 8:
+                print(f'DICA: o número está entre {ultimo_numero_mais_proximo} e {numero_secreto + random.randint(1,10)}')
+        tentativas += 1
+    
+    
+
