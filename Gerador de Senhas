@@ -1,0 +1,94 @@
+# Gerador de senhas
+# Desenvolva um programa que gere senhas aleatórias com base em requisitos específicos,
+# como comprimento mínimo e inclusão de letras maiúsculas, letras minúsculas, números e caracteres especiais.
+
+#comprimento mínimo 8 
+#Ao menos 1 letra maiuscula, 1 caractere especial, 1 numero.
+
+import random
+import os
+#posso caracterizar cada letra como um número numa lista
+
+lista_de_letras = [ 'a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E', 'f', 'F', 'g', 'G', 'h', 'H', 'i', 'I', 'j','J','k', 'K', 'l', 'L', 'm', 'M', 'n', 'N', 'o', 'O', 'p', 'P', 'q', 'Q', 'r', 'R', 's', 'S', 't', 'T', 'u', 'U', 'v', 'V', 'w', 'W', 'x', 'X', 'y','Y', 'z', 'Z']
+lista_de_caracteres = [ '!', "@", "#", "$", "%", "&", "*", "(", ")", "_","+", "-", "*", ".", ",", "/", "?", ";", ":", "<", ">", "{", "}", "[", "]" ]
+# #Letra p/lista
+# random.randint(0,51)
+# #numeros
+# random.randint(0,9)
+# #caracteres
+# random.randint(0,26)
+senha_validada = False
+senha_gerada = ''
+tamanho_senha = random.randint(8,30)
+proximo_char = 0
+contagem_caracteres_esp = 0
+contagem_numeros = 0
+letra_selecionada = 0
+contagem_letras_maiusculas = 0
+
+while len(senha_gerada) < tamanho_senha and senha_validada == False:
+        proximo_char += 1
+        selecionador = random.randint(0,2)
+
+        if selecionador == 0:
+
+            letra_selecionada = random.randint(0,51)
+            senha_gerada += lista_de_letras[letra_selecionada]
+            if letra_selecionada % 2 == 1:
+                contagem_letras_maiusculas += 1
+
+        if selecionador == 1 :
+
+            if contagem_numeros < int(tamanho_senha/4) :
+                senha_gerada += str(random.randint(0,9))
+                contagem_numeros += 1
+            else:
+                proximo_char = proximo_char - 1
+            
+        if selecionador == 2 :
+
+            if contagem_caracteres_esp < int(tamanho_senha/8) :
+                senha_gerada += lista_de_caracteres[random.randint(0,24)]
+                contagem_caracteres_esp += 1
+            else:
+                proximo_char = proximo_char - 1
+                
+        if len(senha_gerada) == tamanho_senha:
+            if contagem_letras_maiusculas == 0 and contagem_caracteres_esp == 0 and contagem_numeros == 0:
+
+                #Se a senha não bater com as especificações, resetamos tudo
+                #para criar uma nova senha, até que seja válida
+                print(f"SENHA INVÁLIDA {senha_gerada}")
+                senha_gerada = ''
+                proximo_char = 0
+                contagem_caracteres_esp = 0
+                contagem_numeros = 0
+                letra_selecionada = 0
+                contagem_letras_maiusculas = 0   
+                
+            else: 
+                print("GERADOR DE SENHAS\n")
+                print("Condições: será gerada uma senha com tamanho entre 8 e 60 caracteres") 
+                print("o número máximo de números na senha é 1/4 do tamanho dela")   
+                print("o número máximo de carac.esp. na senha é 1/8 do tamanho dela") 
+                print("A senha terá no mínimo uma letra Maiuscula, um número e um carac.esp.") 
+                print("\n\nAqui está a senha gerada: ")   
+                print(senha_gerada)
+
+                continuar=input("\nDeseja gerar uma senha diferente? (S/N)\n")
+                if continuar == 'S' or continuar == 's':
+                    senha_gerada = ''
+                    proximo_char = 0
+                    contagem_caracteres_esp = 0
+                    contagem_numeros = 0
+                    letra_selecionada = 0
+                    contagem_letras_maiusculas = 0 
+                    os.system("cls")
+                else:
+                    print("\nGERAÇÃO FINALIZADA, OBRIGADO!")
+                    senha_validada = True 
+
+
+
+
+    
