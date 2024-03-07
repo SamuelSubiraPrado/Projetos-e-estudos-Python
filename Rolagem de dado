@@ -1,0 +1,67 @@
+#Simulador de Dados
+#Crie um programa que simule o lançamento de dados, 
+#permitindo ao usuário escolher o número de dados e a quantidade de lados em cada dado.
+
+import os
+import random
+import time
+
+continuar = False
+def dado(imagem):
+    
+    if imagem == 1:
+        print ("  _______")
+        print (" |       |")
+        print (" |   o   |")
+        print (" |_______|")
+    elif imagem == 2:
+        print ("  _______")
+        print (" | o     |")
+        print (" |       |")
+        print (" |_____o_|")
+
+    elif imagem == 3:
+        print ("  _______")
+        print (" | o     |")
+        print (" |   o   |")
+        print (" |_____o_|")
+
+    elif imagem == 4:
+        print ("  _______")
+        print (" | o   o |")
+        print (" |       |")
+        print (" |_o___o_|")
+
+    elif imagem == 5:
+        print ("  _______")
+        print (" | o   o |")
+        print (" |   o   |")
+        print (" |_o___o_|")
+
+    elif imagem == 6:
+        print ("  _______")
+        print (" | o   o |")
+        print (" | o   o |")
+        print (" |_o___o_|")
+
+
+while continuar == False:
+    contador = 0
+    while contador <= 8:
+        contador += 1
+
+        dado(random.randint(1,6))
+
+        
+        time.sleep(0.5)
+        os.system("cls")
+
+    print("✴")
+    dado(random.randint(1,6))
+    print("          ✴")
+    
+    decisao=input("\n\nDeseja rolar o dado novamente(S/N)?")
+    if decisao != 's' and decisao != 'S':
+        continuar = True
+
+
