@@ -1,0 +1,60 @@
+#Agenda de contatos
+#Desenvolva um programa que permita ao usuário adicionar, 
+#visualizar e editar contatos em uma agenda virtual.
+
+import os
+
+lista_contatos = []
+encerrar = False
+while encerrar == False:
+    
+    print("---------AGENDA---------")
+    escolha=input("\n(1) Visualizar Contatos \n(2) Adicionar Contatos \n(3) Editar Contatos \n(4) Encerrar \n\nDigite: ")
+
+    if escolha == '1':
+        if  len(lista_contatos) != 0:
+            os.system("cls")
+            for contato in lista_contatos:
+                print(contato)
+        else: 
+            os.system("cls")
+            print("AGENDA SEM CONTATOS PARA VISUALIZAR\n")
+    elif escolha == '2':
+        os.system("cls")
+        nome = input("Nome: ")
+        tel = input("Telefone: ")
+        if nome == '' or tel == '':
+            os.system("cls")
+            print("CONTATO NÃO FOI ADICIONADO (NÃO DEIXE CAMPOS VAZIOS)\n")    
+        else:
+            lista_contatos.append(f'({len(lista_contatos)+1}) {nome}: {tel}')
+            print("CONTATO ADICIONADO COM SUCESSO\n")
+    elif escolha == '3':
+        if  len(lista_contatos) != 0:
+            os.system("cls")
+            for contato in lista_contatos:
+                print(contato)
+            editar=input('\nQUAL CONTATO DESEJA EDITAR? ')
+            os.system("cls")
+            print(lista_contatos[editar-1])
+            nome = input("Nome: ")
+            tel = input("Telefone: ")
+            lista_contatos.append(f'({editar}) {nome}: {tel}')
+            os.system("cls")
+            print("CONTATO EDITADO COM SUCESSO\n")
+
+        else: 
+            os.system("cls")
+            print("AGENDA SEM CONTATOS PARA EDITAR\n")
+        
+             
+    elif escolha == '4':
+        os.system("cls")
+        encerrar = True
+        print("Obrigado por utilizar!")
+    else:
+        os.system("cls")
+        print("SELECIONE UMA DAS OPÇÕES(1,2,3 ou 4)!\n")
+        continue
+
+
