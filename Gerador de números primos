@@ -1,0 +1,59 @@
+# Gerador de números primos
+# Desenvolva um programa que gere uma lista de números
+# primos dentro de um determinado intervalo fornecido pelo usuário.
+
+import os
+
+def verif_primo(numero):
+
+    verif_numero_primo = False
+    incremento_ate_num_primo = 2
+
+    while verif_numero_primo == False:
+        if numero == 1:
+            lista_primos.append(numero)
+            verif_numero_primo = True
+        else:
+            if (numero % incremento_ate_num_primo) == 0:
+                if numero == incremento_ate_num_primo:
+                    lista_primos.append(numero)
+                    verif_numero_primo = True
+                else:
+                    verif_numero_primo = True
+            incremento_ate_num_primo += 1
+
+verificacao_int = True
+while verificacao_int == True:
+    try:
+        inicio = int(input("Digite o ínicio do intervalo de verificação: "))
+        fim = int(input("Digite o fim do intervalo de verificação: "))
+        if inicio >= fim:
+            os.system("cls")
+            print("O INÍCIO DEVE SER MENOR QUE O FIM!!!.")
+        else:
+            verificacao_int = False
+
+    except(ValueError):
+        os.system("cls")
+        print("DIGITE APENAS NÚMEROS INTEIROS!!!")
+    except:
+        print("ERRO DESCONHECIDO, TENTE NOVAMENTE")
+
+incremento_ate_chegar_no_fim = inicio
+lista_primos = []
+
+while incremento_ate_chegar_no_fim != fim:
+    verif_primo(incremento_ate_chegar_no_fim)
+    incremento_ate_chegar_no_fim += 1
+
+os.system("cls")
+print(f"Entre {inicio} e {fim}, temos os seguintes números primos:")
+print(*lista_primos, sep=' , ')
+print("\n")
+
+
+
+
+
+
+    
