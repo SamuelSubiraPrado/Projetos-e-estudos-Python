@@ -1,0 +1,54 @@
+# Exercício - Lista de tarefas com desfazer e refazer
+
+def mostrar_lista(lista):
+    for item in lista:
+        print(item)
+
+def adicionar_na_lista(tarefa,lista):
+    lista.append(tarefa)
+    return lista
+
+def ultimo_item_removido_lista(lista_que_vai_ter_item_removido):
+    try:
+        item=lista_que_vai_ter_item_removido.pop()
+        return item
+    
+    except IndexError:
+        print("\nNÃO HÁ ITENS PARA REFAZER ESSA AÇÃO\n")
+
+    except:
+        print("\nErro Desconhecido")
+    
+lista_tarefas = []
+itens_desfeitos = []
+continuar = True
+
+while continuar == True:
+
+    input_user = input("Comandos: listar, desfazer, refazer, sair\nDigite uma tarefa ou comando: ")
+
+    if input_user == "desfazer" or input_user == "DESFAZER" or input_user == "Desfazer":
+        desfazer = ultimo_item_removido_lista(lista_tarefas)
+        adicionar_na_lista(desfazer, itens_desfeitos)
+        
+
+    elif input_user == "refazer" or input_user == "REFAZER" or input_user == "Refazer":
+        refazer = ultimo_item_removido_lista(itens_desfeitos)
+        adicionar_na_lista(refazer, lista_tarefas)
+        
+
+    elif input_user == "listar" or input_user == "LISTAR" or input_user == "Listar":
+        mostrar_lista(lista_tarefas)
+
+    elif input_user == "sair" or input_user == "SAIR" or input_user == "Sair":
+        continuar = False
+
+    else:
+        adicionar_na_lista(input_user, lista_tarefas)
+    
+    print("\nTAREFAS:\n")
+
+    if len(lista_tarefas) != 0:
+        mostrar_lista(lista_tarefas)
+
+    print()
