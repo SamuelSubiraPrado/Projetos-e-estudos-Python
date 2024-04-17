@@ -1,0 +1,46 @@
+import json
+import os
+pessoas = [
+    {
+        "nome": 'maria',
+        "sobrenome": 'vieira',
+        "idade": 25,
+        "ativo": False,
+        "notas": ['A', 'A+'],
+        "telefones":{
+            "residencial": "00 0000-0000",
+            "celular": "00 0000-0000",
+        }
+    },
+    {
+        "nome": 'Joana',
+        "sobrenome": 'Moreira',
+        "idade": 32,
+        "ativo": False,
+        "notas": ['B', 'A'],
+        "telefones":{
+            "residencial": "00 0000-0000",
+            "celular": "00 0000-0000",
+        }
+    }
+]
+#criar o caminho completo em que estou
+BASE_DIR = os.path.dirname(__file__)
+SAVE_TO = os.path.join(BASE_DIR, 'aula117.2_arquivo-python.json')
+
+#Quero salvar esse arquivo, para isso tenho que abrir um
+#arquivo em formato de criação e ai sim jogar os dados dentro
+with open(SAVE_TO, 'w', encoding='utf8') as file:
+
+    #essa função veio com a importação do json, ele joga as informação no arquivo (DUMP)
+    #   info a ser salva, nome do arquivo criado  formatação   se eu quiser que apareçam carac especiais
+    json.dump(pessoas,         file,               indent = 2, ensure_ascii=False)
+
+print(json.dumps(pessoas, indent = 2))
+
+#Caso queira abrir um arquivo e salvar os dados json de um arquivo exterior, faça desta forma
+#with open(JSON_FILE, 'r', encoding='utf8') as file:
+    #Carregar o arquivo para a variavel
+    #pessoas = json.load(file)
+    #print(pessoas)
+
