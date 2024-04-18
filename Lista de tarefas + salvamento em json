@@ -1,0 +1,80 @@
+import json
+import os
+
+# Lista de tarefas com desfazer e refazer
+lista_tarefas = []
+itens_desfeitos = []
+
+def carregar_arquivo():
+    global lista_tarefas
+    try:
+        BASE_DIR = os.path.dirname(__file__)
+        JSON_FILE = os.path.join(BASE_DIR, 'lista_tarefas.json')
+
+        with open(JSON_FILE, 'r', encoding='utf8') as file:
+            lista_tarefas = json.load(file)
+
+    except FileNotFoundError:
+        print("Nenhum dado salvo para recarregar.\n")
+    
+def salvar_arquivo():
+    global lista_tarefas
+    BASE_DIR = os.path.dirname(__file__)
+    SAVE_TO = os.path.join(BASE_DIR, 'lista_tarefas.json')
+
+    with open(SAVE_TO, 'w', encoding='utf8') as file:
+        json.dump(lista_tarefas, file, indent=2, ensure_ascii=False)
+
+def mostrar_lista(lista):
+    for item in lista:
+        print(item)
+
+def adicionar_na_lista(tarefa, lista):
+    lista.append(tarefa)
+
+def remover_ultimo_item(lista):
+    try:
+        return lista.pop()
+    except IndexError:
+        print("\nNÃO HÁ ITENS PARA REFAZER ESSA AÇÃO\n")
+    except Exception as e:
+        print("\nErro Desconhecido:", e)
+
+def is_comando_terminal(entrada):
+    comandos_terminal = ["cls", "clear", "ls", "dir"]  # Adicione mais comandos se necessário
+    return any(entrada.startswith(cmd) for cmd in comandos_terminal)
+
+carregar_arquivo()
+
+while True:
+    input_user = input("Comandos: listar, desfazer, refazer, sair\nDigite uma tarefa ou comando: ")
+    print("\nTAREFAS:\n")
+
+    if input_user.lower() == "desfazer":
+        desfazer = remover_ultimo_item(lista_tarefas)
+
+        if desfazer is not None:
+            adicionar_na_lista(desfazer, itens_desfeitos)
+            mostrar_lista(lista_tarefas)
+            salvar_arquivo()
+
+    elif input_user.lower() == "refazer":
+        refazer = remover_ultimo_item(itens_desfeitos)
+        
+        if refazer is not None:
+            adicionar_na_lista(refazer, lista_tarefas)
+            mostrar_lista(lista_tarefas)
+            salvar_arquivo()
+
+    elif input_user.lower() == "listar":
+        mostrar_lista(lista_tarefas)
+    
+    elif input_user.lower() == "sair":
+        salvar_arquivo()  # Salva o arquivo antes de sair do programa
+        break
+
+    else:
+        if not is_comando_terminal(input_user) and input_user.lower() != "":
+            adicionar_na_lista(input_user, lista_tarefas)
+            mostrar_lista(lista_tarefas)
+            salvar_arquivo()
