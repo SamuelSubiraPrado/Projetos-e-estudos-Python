@@ -1,0 +1,180 @@
+import abc
+
+class Conta(abc.ABC):
+    
+    def __init__(self,agencia:int,num_conta:int,saldo: float =0) -> None:
+        self.agencia = agencia
+        self.num_conta = num_conta
+        self.saldo = saldo
+
+    @abc.abstractmethod 
+    def sacar(self,valor: float) -> float:
+        raise NotImplementedError("Implemente o método Conta")
+        
+    def depositar(self, valor: float) -> float:
+        self.saldo += valor 
+        self.detalhes(f"(Depósito, Valor: R${valor})")
+        return self.saldo
+    
+    def detalhes(self, msg: str ='') -> None:
+        print(f'O seu saldo é R${self.saldo:.2f} {msg}')
+        print('--')
+
+    def __repr__(self):
+        class_name = type(self).__name__
+        attrs = f"({self.agencia!r}, {self.num_conta!r}, {self.saldo!r})"
+        return f"{class_name} {attrs}"
+
+class ContaPoupanca(Conta):
+    def sacar(self,valor):
+        valor_pos_saque = self.saldo - valor
+
+        if valor_pos_saque >= 0:
+            self.saldo -= valor
+            self.detalhes(f"(Saque, Valor: R${valor})")
+            return self.saldo #Se entrar na condição, para aqui
+        
+        #Se não entrar, continua aqui
+        print("Não foi possível sacar o valor desejado")
+        self.detalhes(f"(Saque negado, Valor: R${valor})")
+        return self.saldo
+
+class ContaCorrente(Conta):
+    def __init__(self, agencia:int, num_conta: int, saldo: float =0, limite: float =0):
+        super().__init__(agencia, num_conta, saldo) #Passo pra suer, o que ela precisa
+        self.limite = limite #Atributo adicional
+
+
+    def sacar(self,valor: float) -> float:
+        valor_pos_saque = self.saldo - valor
+        limite_maximo = -self.limite #limite negativo, para permitir saques dentro do limite
+
+        if valor_pos_saque >= limite_maximo:
+            self.saldo -= valor
+            self.detalhes(f"(Saque, Valor: R${valor})")
+            return self.saldo #Se entrar na condição, para aqui
+        
+        print("Não foi possível sacar o valor desejado")
+        print(f"Seu limite é {-self.limite:.2f}")
+        self.detalhes(f"(Saque negado, Valor: R${valor})")
+        return self.saldo
+    
+    def __repr__(self):
+        class_name = type(self).__name__
+        attrs = f"({self.agencia!r}, {self.num_conta!r}, "\
+            f"{self.saldo!r}, {self.limite!r})" #Essa barra '\ ' serve para quebrar linha
+        return f"{class_name} {attrs}"
+
+class Pessoa:
+    def __init__(self, nome: str, idade: int) -> None:
+        self.nome = nome
+        self.idade = idade
+
+    @property
+    def nome(self):
+        return self._nome
+
+    @nome.setter
+    def nome(self,nome: str):
+        self._nome = nome
+
+    @property
+    def idade(self):
+        return self._idade
+    
+    @idade.setter
+    def idade(self,idade: int):
+        self._idade = idade
+    
+    def __repr__(self):
+        class_name = type(self).__name__
+        attrs = f"({self.nome!r}, {self.idade!r})"
+        return f"{class_name} {attrs}"
+
+class Cliente(Pessoa):
+    def __init__(self, nome: str, idade: int) -> None:
+        super().__init__(nome,idade)
+        self.num_conta: Conta | None = None
+
+class Banco:
+    def __init__(
+            self, 
+            agencias: list[int] | None = None,
+            clientes: list[Pessoa] | None = None,
+            contas: list[Conta] | None = None
+            
+        ):
+            #Se for None, será criado uma lista vazia
+            self.agencias = agencias or []
+            self.clientes = clientes or []
+            self.contas = contas or []
+
+    def _checar_agencia(self, conta):
+        if conta.agencia in self.agencias:
+            return True
+        return False
+
+    def _checar_clientes(self, cliente):
+        if cliente in self.clientes:
+            return True
+        return False
+
+    def _checar_conta(self, conta):
+        if conta in self.contas:
+            return True
+        return False
+    
+    def _checar_se_conta_e_do_cliente(self, cliente, conta):
+        if conta is cliente.num_conta:
+            return True
+        return False
+
+    def autenticar (self, cliente: Pessoa, conta: Conta):
+        return self._checar_conta(conta) and \
+            self._checar_clientes(cliente) and \
+                self._checar_agencia(conta) and \
+                self._checar_se_conta_e_do_cliente(cliente, conta)
+    
+    def __repr__(self):
+        class_name = type(self).__name__
+        attrs = f"({self.clientes!r}, {self.agencias!r}, {self.contas!r})"
+        return f"{class_name} {attrs}"
+
+# TESTES Cliente
+c1 = Cliente("Samuel", 20)
+c1.num_conta = ContaCorrente(111, 222, 0, 0)
+# print(c1)
+# print(c1.nome)
+# print(c1.num_conta)
+c2 = Cliente("Maria", 18)
+c2.num_conta = ContaPoupanca(222, 223, 100)
+
+banco1 = Banco()
+banco1.clientes.extend([c1, c2])
+banco1.contas.extend([c1.num_conta, c2.num_conta])
+banco1.agencias.extend([111,222])
+# print(banco1)
+
+if banco1.autenticar(c1, c1.num_conta):
+    c1.num_conta.depositar(1)
+
+#TESTES DE AUTENTICACAO
+# print(banco1.autenticar(c1, c1.num_conta)) #Info corretas
+# print(banco1.autenticar(c2, c2.num_conta))
+# print(banco1.autenticar(c2, c1.num_conta)) #Info incorretas
+
+# TESTES CONTA POUPANCA
+# cp1 = ContaPoupanca(111,222)
+# cp1.sacar(1)
+# cp1.depositar(1)
+# cp1.sacar(1)
+# print("#############")
+
+# # TESTES CONTA CORRENTE
+# cc1 = ContaCorrente(111,222,0,100)
+# cc1.sacar(1)
+# cc1.depositar(1)
+# cc1.sacar(1)
+# cc1.sacar(99)
+# cc1.sacar(1)
+# print("#############")
